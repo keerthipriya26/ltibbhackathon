@@ -1,0 +1,43 @@
+#write manifest file for deployment
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-app-container
+        image: kee26/bloodbank:appimage
+        ports:
+        - containerPort: 80  #our php application is running on port 80
+        envFrom:
+        - configMapRef:
+            name: my-configmap
+        resources:
+          limits:
+            memory: "300Mi"
+            cpu: "300m"
+          requests:
+            memory: "200Mi"
+            cpu: "150m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10

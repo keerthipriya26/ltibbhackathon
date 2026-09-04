@@ -1,0 +1,43 @@
+#write manifest file for statefulset
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: my-statefulset
+spec:
+  serviceName: "my-service"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-db
+  template:
+    metadata:
+      labels:
+        app: my-db
+    spec:
+      containers:
+      - name: my-db-container
+        image: kee26/bloodbank:dbimage
+        ports:
+        - containerPort: 3306
+        envFrom:
+        - secretRef:
+            name: my-secret
+        resources:
+          limits:
+            memory: "500Mi"
+            cpu: "500m"
+          requests:
+            memory: "300Mi"
+            cpu: "200m" 
+        volumeMounts:
+        - name: my-db-storage
+          mountPath: usr/share/nginx/html
+  volumeClaimTemplates:
+  - metadata:
+      name: my-db-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi  
