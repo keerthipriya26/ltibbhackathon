@@ -1,0 +1,14 @@
+#write a manifest file for service for db
+---   
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-db-service
+spec:
+  clusterIP: None
+  selector:
+    app: my-statefulset
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306

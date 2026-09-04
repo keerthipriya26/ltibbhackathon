@@ -1,0 +1,11 @@
+#write. amanifest file for configmap
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-configmap
+data:
+  DB_HOST: "mysqldb"
+  DB_PORT: "3306"
+  OWNER: "KeerthiPriya"
+
